@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  app:
+    image: petk/web-pecl
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - peclphpnet
+    volumes:
+      - ../web-pecl:/var/www/app
+    ports:
+      - "80:80"
+  database:
+    image: mariadb:10
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=pear
+      - MYSQL_USER=nobody
+      - MySQL_PASSWORD=password
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - peclphpnet
+    volumes:
+      - ../web-pecl/sql/pecl_full_structure_prod.sql:/docker-entrypoint-initdb.d/01_schema.sql
+
+      #- ../web-pecl/sql/aggregated_package_stats.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      #- ../web-pecl/sql/categories.sql:/docker-entrypoint-initdb.d/02_schema.sql
+      #- ../web-pecl/sql/cvs_acl.sql:/docker-entrypoint-initdb.d/03_schema.sql
+      #- ../web-pecl/sql/cvs_group_membership.sql:/docker-entrypoint-initdb.d/04_schema.sql
+      #- ../web-pecl/sql/cvs_groups.sql:/docker-entrypoint-initdb.d/05_schema.sql
+      #- ../web-pecl/sql/deps.sql:/docker-entrypoint-initdb.d/06_schema.sql
+      #- ../web-pecl/sql/downloads.sql:/docker-entrypoint-initdb.d/07_schema.sql
+      #- ../web-pecl/sql/files.sql:/docker-entrypoint-initdb.d/08_schema.sql
+      #- ../web-pecl/sql/karma.sql:/docker-entrypoint-initdb.d/09_schema.sql
+      #- ../web-pecl/sql/maintains.sql:/docker-entrypoint-initdb.d/10_schema.sql
+      #- ../web-pecl/sql/notes.sql:/docker-entrypoint-initdb.d/11_schema.sql
+      #package_acl.sql
+      #package_aliases.sql
+      #package_stats.sql
+      ##packages.sql
+      #provides.sql
+      #state_order.sql
+      #releases.sql
+      #users.sql
+  adminer:
+    image: petk/adminer
+    ports:
+      - "8080:80"
+    networks:
+      - peclphpnet
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  peclphpnet:
