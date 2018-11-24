@@ -28,7 +28,6 @@ services:
       - peclphpnet
     volumes:
       - ../web-pecl/sql/pecl_full_structure_prod.sql:/docker-entrypoint-initdb.d/01_schema.sql
-      - ../extraFixtures.sql:/docker-entrypoint-initdb.d/02_extraFixtures.sql
 
       #- ../web-pecl/sql/aggregated_package_stats.sql:/docker-entrypoint-initdb.d/01_schema.sql
       #- ../web-pecl/sql/categories.sql:/docker-entrypoint-initdb.d/02_schema.sql
