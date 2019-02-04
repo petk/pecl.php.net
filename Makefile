@@ -13,3 +13,7 @@ install: build ## Build and install everything
   @[ -d "web-pecl" ] || git clone git://github.com/php/web-pecl
   docker swarm init
   docker stack deploy -c .docker/stack.dev.yaml peclphpnet
+
+app = docker container exec -it peclphpnet_app.1.$$(docker service ps -f 'name=peclphpnet_app.1' -f 'desired-state=running' peclphpnet_app -q --no-trunc)
+run: ## Run a command in a running application container
+  @$(app) $(a)
